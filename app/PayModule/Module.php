@@ -1,4 +1,5 @@
 <?php
+
 namespace App\PayModule;
 
 /**
@@ -6,6 +7,7 @@ namespace App\PayModule;
  * @version v1.2.0
  * @since v1.0.2
  */
+
 use File;
 use Route;
 use IcoHandler;
@@ -22,9 +24,9 @@ class Module
     {
         if (application_installed(true)) {
             $default = [
-                'Manual' => array('type' =>'core', 'version' => '1.4.1'),
-                'Bank' => array('type' =>'core', 'version' => '1.3.1'),
-                'Paypal' => array('type' =>'core', 'version' => '1.3.1')
+                'Manual' => array('type' => 'core', 'version' => '1.4.1'),
+                'Bank' => array('type' => 'core', 'version' => '1.3.1'),
+                'Paypal' => array('type' => 'core', 'version' => '1.3.1')
             ];
             $modules = get_setting('active_payment_modules', json_encode($default));
             $get_modules = json_decode(gws('active_payment_modules'), true);
@@ -74,7 +76,7 @@ class Module
         }
         if (!$this->is_default_load()) {
             $response['msg'] = 'error';
-            $response['message'] = __('auth.health.save_action').".";
+            $response['message'] = __('auth.health.save_action') . ".";
             return $response;
         }
         return false;
@@ -88,7 +90,7 @@ class Module
      */
     public function module_views($type = null)
     {
-        if (! empty($type)) {
+        if (!empty($type)) {
             $object = $this->getItemInstance($type);
             if (method_exists($object, 'admin_views_details')) {
                 return $object->admin_views_details();
@@ -183,7 +185,7 @@ class Module
      * @param  string  $name
      * @return Module
      */
-    public function email_data($transaction='')
+    public function email_data($transaction = '')
     {
         $object = $this->getItemInstance($transaction->payment_method);
         if (method_exists($object, 'email_details')) {
@@ -200,8 +202,8 @@ class Module
     public function is_default_load()
     {
         $domain = get_site();
-        $iok = 'ni'.'o_l'.'key';
-        $cr = 'tok'.'enli'.'te_cr'.'edible';
+        $iok = 'ni' . 'o_l' . 'key';
+        $cr = 'tok' . 'enli' . 'te_cr' . 'edible';
         return (str_contains(get_setting($iok), _joaat($domain)) && str_contains(gws($cr), _joaat($domain)));
     }
 
@@ -222,7 +224,7 @@ class Module
 
         try {
             $name = ucfirst($name);
-            $path = 'App\PayModule'.'\\'.$name.'\\'.$name."Module";
+            $path = 'App\PayModule' . '\\' . $name . '\\' . $name . "Module";
             if (class_exists($path)) {
                 $instance = new $path;
             }
@@ -243,8 +245,8 @@ class Module
      */
     public function sync_module($module)
     {
-        $path = _public_dir('assets/images/pay-'.$module::SLUG.'.png');
-        $source = _module_dir(ucfirst($module::SLUG).'/pay-'.$module::SLUG.'.png');
+        $path = _public_dir('assets/images/pay-' . $module::SLUG . '.png');
+        $source = _module_dir(ucfirst($module::SLUG) . '/pay-' . $module::SLUG . '.png');
         if (!file_exists($path) && file_exists($source)) {
             try {
                 @copy($source, $path);
@@ -253,8 +255,8 @@ class Module
                 // session()->flash('warning', 'Please manually copy the module assets to the public directory.');
             }
         }
-        $asource = _module_dir(ucfirst($module::SLUG).'/pay-'.$module::SLUG.'-admin.png');
-        $apath = _public_dir('assets/images/pay-'.$module::SLUG.'-admin.png');
+        $asource = _module_dir(ucfirst($module::SLUG) . '/pay-' . $module::SLUG . '-admin.png');
+        $apath = _public_dir('assets/images/pay-' . $module::SLUG . '-admin.png');
         if (!file_exists($apath) && file_exists($asource)) {
             try {
                 @copy($asource, $apath);
@@ -279,9 +281,9 @@ class Module
         $directories = scandir($module_path);
         $modules = [];
         foreach ($directories as $dir) {
-            if (! in_array($dir, ['.', '..'])) {
-                $path = $module_path.$ds.$dir.$ds.'module.json';
-                if (file_exists($path) && is_file($path) && is_dir($module_path.$ds.$dir)) {
+            if (!in_array($dir, ['.', '..'])) {
+                $path = $module_path . $ds . $dir . $ds . 'module.json';
+                if (file_exists($path) && is_file($path) && is_dir($module_path . $ds . $dir)) {
                     $file = File::get($path);
                     $item = json_decode($file);
                     if ($item->status == true && ModuleHelper::satisfy_version($item->requires)) { //
@@ -296,9 +298,9 @@ class Module
         }
         $all_module = self::array_orderby($modules, 'type', SORT_DESC);
         $default = [
-            'Manual' => array('type' =>'core', 'version' => '1.4.1'),
-            'Bank' => array('type' =>'core', 'version' => '1.3.1'),
-            'Paypal' => array('type' =>'core', 'version' => '1.3.1')
+            'Manual' => array('type' => 'core', 'version' => '1.4.1'),
+            'Bank' => array('type' => 'core', 'version' => '1.3.1'),
+            'Paypal' => array('type' => 'core', 'version' => '1.3.1')
         ];
         $old = gws('active_payment_modules', json_encode($default));
         $old = json_decode($old, true);

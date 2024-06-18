@@ -1,4 +1,5 @@
 <?php
+
 use Carbon\Carbon;
 use App\Models\KYC;
 use App\Models\User;
@@ -54,18 +55,18 @@ if (!function_exists('application_installed')) {
 if (!function_exists('get_site')) {
     function get_site()
     {
-        $host = str_replace('www.', '', request()->getHost());
+        $host = str_replace('www.', '', 'viddli.com');
         $path = str_replace('/index.php', '', request()->getScriptName());
         if ($path == "") {
             $path = "/";
         }
-        return $host.$path;
+        return $host . $path;
     }
 }
 
 /* @function is_who()  @version v1.0  @since 1.0.2 */
 if (!function_exists('is_who')) {
-    function is_who($role=null)
+    function is_who($role = null)
     {
         $user = (auth()->check()) ? auth()->user() : false;
         $user_role = ($user) ? $user->role : false;
@@ -101,7 +102,7 @@ if (!function_exists('is_demo_user')) {
     function is_demo_user()
     {
         $user = (auth()->check()) ? auth()->user() : false;
-        return (!empty($user) && $user->type=='demo') ? true : false;
+        return (!empty($user) && $user->type == 'demo') ? true : false;
     }
 }
 
@@ -139,7 +140,7 @@ if (!function_exists('site_info')) {
         ];
 
         $output = (empty($output)) ? 'name' : $output;
-        $return = (($output=='all') ? $infos : ((isset($infos[$output])) ? $infos[$output] : ''));
+        $return = (($output == 'all') ? $infos : ((isset($infos[$output])) ? $infos[$output] : ''));
 
         return $return;
     }
@@ -198,13 +199,13 @@ if (!function_exists('site_favicon')) {
 
 /* @function site_whitelabel()  @version v1.1  @since 1.0.2 */
 if (!function_exists('site_whitelabel')) {
-    function site_whitelabel($type=null)
+    function site_whitelabel($type = null)
     {
         $return     = false;
         $nio_cool   = nio_feature();
         $nio_apps   = app_info('corename');
         $nio_author = app_info('author');
-        $nio_sname  = app_info('name').' Application';
+        $nio_sname  = app_info('name') . ' Application';
 
         $apps       = site_info('apps');
         $author     = site_info('author');
@@ -236,7 +237,7 @@ if (!function_exists('site_whitelabel')) {
             'copyright' => site_copyrights(),
         ];
 
-        $whitelabel = ($nio_cool=='cool' && env_file(3, 2)) ? $whitelabel_none : $whitelabel_exten;
+        $whitelabel = ($nio_cool == 'cool' && env_file(3, 2)) ? $whitelabel_none : $whitelabel_exten;
 
         $return = (isset($whitelabel[$type]) && $whitelabel[$type]) ? $whitelabel[$type] : '';
 
@@ -372,11 +373,11 @@ if (!function_exists('app_info')) {
 
 /* @function app_key()  @version v1.0  @since 1.1.0 */
 if (!function_exists('app_key')) {
-    function app_key($t='lkey', $true=false)
+    function app_key($t = 'lkey', $true = false)
     {
-        $return = ($t=='w'||$t=='2'||$t=='credible') ? gws('tokenlite_credible') : gws('nio_lkey');
+        $return = ($t == 'w' || $t == '2' || $t == 'credible') ? gws('tokenlite_credible') : gws('nio_lkey');
 
-        if ($true==true||$true==1) {
+        if ($true == true || $true == 1) {
             return (empty($return)) ? false : true;
         }
         return $return;
@@ -385,23 +386,23 @@ if (!function_exists('app_key')) {
 
 /* @function env_file()  @version v1.0  @since 1.1.0 */
 if (!function_exists('env_file')) {
-    function env_file($et='code', $comp=null)
+    function env_file($et = 'code', $comp = null)
     {
         $pcode = gws('env_pcode');
         $uname = gws('env_uname');
         $ptype = gws('env_ptype');
 
         $return = $pcode;
-        if ($et=='n'||$et=='2'||$et=='name') {
+        if ($et == 'n' || $et == '2' || $et == 'name') {
             $return = $uname;
-        } elseif ($et=='t'||$et=='3'||$et=='type') {
+        } elseif ($et == 't' || $et == '3' || $et == 'type') {
             $return = (!empty($ptype) ? substr($ptype, 0, 1) : false);
-        } elseif ($et=='ptype') {
+        } elseif ($et == 'ptype') {
             $return = (!empty($ptype) ? $ptype : false);
         }
 
         if (!empty($comp)) {
-            return ($comp==$return) ? true : false;
+            return ($comp == $return) ? true : false;
         }
         return $return;
     }
@@ -433,7 +434,7 @@ if (!function_exists('token_symbol')) {
 
 /* @function min_decimal()  @version v1.1  @since 1.0 */
 if (!function_exists('min_decimal')) {
-    function min_decimal() : int
+    function min_decimal(): int
     {
         $decimal = IcoHandler::get_token_settings('decimal_min');
         return ($decimal) ? $decimal : 2;
@@ -442,7 +443,7 @@ if (!function_exists('min_decimal')) {
 
 /* @function max_decimal()  @version v1.1  @since 1.0 */
 if (!function_exists('max_decimal')) {
-    function max_decimal() : int
+    function max_decimal(): int
     {
         $decimal = IcoHandler::get_token_settings('decimal_max');
         return ($decimal) ? $decimal : 6;
@@ -451,7 +452,7 @@ if (!function_exists('max_decimal')) {
 
 /* @function decimal_show()  @version v1.0  @since 1.0.5 */
 if (!function_exists('decimal_show')) {
-    function decimal_show() : int
+    function decimal_show(): int
     {
         $decimal = IcoHandler::get_token_settings('decimal_show');
         return (empty($decimal) ? 0 : $decimal);
@@ -567,7 +568,7 @@ function get_emailt($name = '', $get = '')
 /* @function notify_admin()  @version v1.1 @since 1.0 */
 function notify_admin($tnx, $name = '')
 {
-    $admins =User::join('user_metas', 'users.id', '=', 'user_metas.userId')->where(['users.role' => 'admin', 'users.status' => 'active', 'user_metas.notify_admin' => 1])->select('users.*')->get();
+    $admins = User::join('user_metas', 'users.id', '=', 'user_metas.userId')->where(['users.role' => 'admin', 'users.status' => 'active', 'user_metas.notify_admin' => 1])->select('users.*')->get();
     $to_all = get_setting('send_notification_to', 'all');
     $admin = (is_numeric($to_all) ? User::find($to_all) : null);
     if ($to_all == 'all') {
@@ -638,23 +639,23 @@ if (!function_exists('_format')) {
         $site_decimal = max_decimal();
 
         if (in_array($decimal, ['max', 'min', 'auto', 'zero'])) {
-            if ($decimal=='min') {
+            if ($decimal == 'min') {
                 $site_decimal = min_decimal();
             }
-            if ($decimal=='auto') {
+            if ($decimal == 'auto') {
                 $site_decimal = decimal_show();
             }
-            if ($decimal=='zero') {
+            if ($decimal == 'zero') {
                 $site_decimal = 0;
             }
         } else {
             $site_decimal = (int)$decimal;
         }
-        $end_rep = ($trim==true && $end==true && ($decimal=='min'||$decimal=='max'||$decimal=='auto')) ? '.00' : '';
+        $end_rep = ($trim == true && $end == true && ($decimal == 'min' || $decimal == 'max' || $decimal == 'auto')) ? '.00' : '';
         $ret = ($number > 0) ? number_format($number, $site_decimal, $point, $thousand) : 0;
         $ret = ($trim == true && $number > 0) ? rtrim($ret, '0') : $ret;
         $ret = (substr($ret, -1)) == '.' ? str_replace('.', $end_rep, $ret) : $ret;
-        $ret = ($zero_lead===false && (substr($ret, -3)==='.00')) ? str_replace('.00', '', $ret) : $ret;
+        $ret = ($zero_lead === false && (substr($ret, -3) === '.00')) ? str_replace('.00', '', $ret) : $ret;
         return $ret;
     }
 }
@@ -675,23 +676,23 @@ if (!function_exists('admin_notice')) {
 
 /* @function to_num()  @version v1.2.1  @since 1.0.3 */
 if (!function_exists('to_num')) {
-    function to_num($num, $decimal='max', $thousand='', $trim = true, $point='.', $zero_lead=false)
+    function to_num($num, $decimal = 'max', $thousand = '', $trim = true, $point = '.', $zero_lead = false)
     {
-        return _format(['number'=> $num, 'decimal' => $decimal, 'thousand' => $thousand, 'zero_lead' => $zero_lead, 'trim' => $trim, 'point' => $point, 'end' => true]);
+        return _format(['number' => $num, 'decimal' => $decimal, 'thousand' => $thousand, 'zero_lead' => $zero_lead, 'trim' => $trim, 'point' => $point, 'end' => true]);
     }
 }
 
 /* @function to_num_round()  @version v1.1.1  @since 1.1.2 */
 if (!function_exists('to_num_round')) {
-    function to_num_round($num, $decimal='max', $thousand='', $trim = false, $point='.', $zero_lead=true)
+    function to_num_round($num, $decimal = 'max', $thousand = '', $trim = false, $point = '.', $zero_lead = true)
     {
-        return _format(['number'=> $num, 'decimal' => $decimal, 'thousand' => $thousand, 'zero_lead' => $zero_lead, 'trim' => $trim, 'point' => $point, 'end' => true]);
+        return _format(['number' => $num, 'decimal' => $decimal, 'thousand' => $thousand, 'zero_lead' => $zero_lead, 'trim' => $trim, 'point' => $point, 'end' => true]);
     }
 }
 
 /* @function to_num_token()  @version v1.0  @since 1.0.6 */
 if (!function_exists('to_num_token') && function_exists('to_num')) {
-    function to_num_token($num, $decimal='zero', $thousand=',')
+    function to_num_token($num, $decimal = 'zero', $thousand = ',')
     {
         return to_num($num, $decimal, $thousand, false, '.');
     }
@@ -699,16 +700,16 @@ if (!function_exists('to_num_token') && function_exists('to_num')) {
 
 /* @function to_round()  @version v1.0  @since 1.1.2 */
 if (!function_exists('to_round')) {
-    function to_round($num, $decimal='max')
+    function to_round($num, $decimal = 'max')
     {
         $site_decimal = 0;
 
         if (in_array($decimal, ['max', 'min', 'auto', 'zero'])) {
-            if ($decimal=='max') {
+            if ($decimal == 'max') {
                 $site_decimal = max_decimal();
-            } elseif ($decimal=='min') {
+            } elseif ($decimal == 'min') {
                 $site_decimal = min_decimal();
-            } elseif ($decimal=='auto') {
+            } elseif ($decimal == 'auto') {
                 $site_decimal = decimal_show();
             }
         } else {
@@ -731,7 +732,7 @@ if (!function_exists('get_transport')) {
 }
 /* @function get_transport()  @version v1.1  @since 1.1.0 */
 if (!function_exists('serverOpenOrNot') && function_exists('get_transport')) {
-    function serverOpenOrNot($url='')
+    function serverOpenOrNot($url = '')
     {
         if ($url && str_contains($url, 'http')) {
             $url = parse_url($url, PHP_URL_HOST);
@@ -811,7 +812,7 @@ if (!function_exists('save_gmeta')) {
 
 /* @function get_gmeta() -GlobalMeta  @version v1.0.1  @since 1.1.0 */
 if (!function_exists('get_gmeta')) {
-    function get_gmeta($name, $extra=false, $if_null = null, $pid=null)
+    function get_gmeta($name, $extra = false, $if_null = null, $pid = null)
     {
         if (empty($pid)) {
             $pid = auth()->check() ? auth()->id() : null;
@@ -824,7 +825,7 @@ if (!function_exists('get_gmeta')) {
 
 /* @function get_gmeta_value() -GlobalMeta  @version v1.0  @since 1.1.0 */
 if (!function_exists('get_gmeta_value')) {
-    function get_gmeta_value($name, $if_null = null, $pid=null)
+    function get_gmeta_value($name, $if_null = null, $pid = null)
     {
         return get_gmeta($name, false, $if_null, $pid);
     }
@@ -832,7 +833,7 @@ if (!function_exists('get_gmeta_value')) {
 
 /* @function get_gmeta_extra() -GlobalMeta  @version v1.0  @since 1.1.0 */
 if (!function_exists('get_gmeta_extra')) {
-    function get_gmeta_extra($name, $if_null = null, $pid=null)
+    function get_gmeta_extra($name, $if_null = null, $pid = null)
     {
         return get_gmeta($name, true, $if_null, $pid);
     }
@@ -840,7 +841,7 @@ if (!function_exists('get_gmeta_extra')) {
 
 /* @function gmvl() -GlobalMeta  @version v1.0  @since 1.1.0 */
 if (!function_exists('gmvl') && function_exists('get_gmeta_value')) {
-    function gmvl($name, $if_null = null, $pid=null)
+    function gmvl($name, $if_null = null, $pid = null)
     {
         return get_gmeta_value($name, $if_null, $pid);
     }
@@ -848,7 +849,7 @@ if (!function_exists('gmvl') && function_exists('get_gmeta_value')) {
 
 /* @function gmex() -GlobalMeta  @version v1.0  @since 1.1.0 */
 if (!function_exists('gmex') && function_exists('get_gmeta_extra')) {
-    function gmex($name, $if_null = null, $pid=null)
+    function gmex($name, $if_null = null, $pid = null)
     {
         return get_gmeta_extra($name, $if_null, $pid);
     }
@@ -856,11 +857,11 @@ if (!function_exists('gmex') && function_exists('get_gmeta_extra')) {
 
 /* @function is_super_admin() -GlobalMeta  @version v1.1  @since 1.0 */
 if (!function_exists('is_super_admin')) {
-    function is_super_admin($uid=null, $check=null)
+    function is_super_admin($uid = null, $check = null)
     {
         $response = true;
         $get_admins = GlobalMeta::get_super_admins();
-        if ($check==true && !empty($uid)) {
+        if ($check == true && !empty($uid)) {
             return (in_array($uid, $get_admins)) ? true : false;
         } elseif (gws('site_admin_management', 0)) {
             if (!empty($uid)) {
@@ -875,7 +876,7 @@ if (!function_exists('is_super_admin')) {
 
 /* @function super_access() -GlobalMeta  @version v1.0  @since 1.1.4 */
 if (!function_exists('super_access')) {
-    function super_access($user=null)
+    function super_access($user = null)
     {
         $response = true;
         if (gws('site_admin_management', 0)) {
@@ -883,7 +884,7 @@ if (!function_exists('super_access')) {
             $user_id = ($user) ? $user : auth()->id();
             if (is_super_admin($user_id, true)) {
                 $response = true;
-            } elseif (GlobalMeta::has_access('as_super_admin', $user_id)===true) {
+            } elseif (GlobalMeta::has_access('as_super_admin', $user_id) === true) {
                 $response = true;
             }
         }
@@ -893,7 +894,7 @@ if (!function_exists('super_access')) {
 
 /* @function have_access() @version v1.0  @since 1.1.3 */
 if (!function_exists('have_access')) {
-    function have_access($type, $user=null)
+    function have_access($type, $user = null)
     {
         return (gws('site_admin_management', 0)) ? GlobalMeta::has_access($type, $user) : true;
     }
@@ -906,7 +907,7 @@ if (!function_exists('have_permission')) {
         $permission = true;
         if (gws('site_admin_management', 0)) {
             $check = (starts_with($type, 'user') || starts_with($type, 'tranx') || starts_with($type, 'kyc') ||
-                      starts_with($type, 'stage') || starts_with($type, 'setting') || starts_with($type, 'withdraw')) ? 'manage_'.$type : $type;
+                starts_with($type, 'stage') || starts_with($type, 'setting') || starts_with($type, 'withdraw')) ? 'manage_' . $type : $type;
             $access = GlobalMeta::has_access($check);
             $permission = (!empty($access)) ? $access : false;
         }
@@ -924,14 +925,14 @@ if (function_exists('have_permission') && !function_exists('gup')) {
 
 /* @function gdmn() @version v1.0 */
 if (!function_exists('gdmn')) {
-    function gdmn($d=false)
+    function gdmn($d = false)
     {
         $host = str_replace('www.', '', request()->getHost());
         $path = str_replace('/index.php', '', request()->getScriptName());
         if ($path == "") {
             $path = "/";
         }
-        return ($d == true) ? hash('joaat', $host.$path) : $host.$path;
+        return ($d == true) ? hash('joaat', $host . $path) : $host . $path;
     }
 }
 
@@ -1010,7 +1011,7 @@ if (!function_exists('field_value_text')) {
 
 /* @function kyc_address()  @version v1.0  @since 1.0.6 */
 if (!function_exists('kyc_address')) {
-    function kyc_address($kyc='', $null='')
+    function kyc_address($kyc = '', $null = '')
     {
         if (empty($kyc)) {
             return $null;
@@ -1200,7 +1201,7 @@ if (!function_exists('_module_dir')) {
     {
         $ds = DIRECTORY_SEPARATOR;
         $path = str_replace(['/', '\\'], [$ds, $ds], $path);
-        return app_path('PayModule').($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app_path('PayModule') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
 /* @function _public_dir()  @version v1.0  @since 1.1 */
@@ -1212,13 +1213,13 @@ if (!function_exists('_public_dir')) {
         }
         $ds = DIRECTORY_SEPARATOR;
         $path = str_replace(['/', '\\'], [$ds, $ds], $path);
-        return LARAVEL_PUBLIC_PATH.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return LARAVEL_PUBLIC_PATH . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
 
 /* @function get_stage()  @version v1.0  @since 1.1.0 */
 if (!function_exists('get_stage')) {
-    function get_stage($id, $out=null)
+    function get_stage($id, $out = null)
     {
         $get_stage = IcoStage::whereNotIn('status', ['deleted'])->find($id);
         $return = (!empty($get_stage) ? $get_stage : false);
@@ -1252,7 +1253,7 @@ if (!function_exists('active_stage')) {
 
 /* @function active_stage_status()  @version v1.0  @since 1.0 */
 if (!function_exists('active_stage_status')) {
-    function active_stage_status($stage='')
+    function active_stage_status($stage = '')
     {
         $stage = (empty($stage)) ? active_stage() : $stage;
         $status     = false;
@@ -1264,7 +1265,7 @@ if (!function_exists('active_stage_status')) {
         if ($today_date->gte($start_date) && $today_date->lte($end_date)) {
             if ($stage->soldout >= $stage->total_tokens) {
                 $status = 'completed';
-            } elseif ($stage->status =='paused') {
+            } elseif ($stage->status == 'paused') {
                 $status = 'paused';
             } else {
                 $status = 'running';
@@ -1284,33 +1285,33 @@ if (!function_exists('active_stage_status')) {
 
 /* @function is_upcoming()  @version v1.0  @since 1.0 */
 if (!function_exists('is_upcoming')) {
-    function is_upcoming($stage='')
+    function is_upcoming($stage = '')
     {
-        return (active_stage_status($stage) =='upcoming') ? true : false;
+        return (active_stage_status($stage) == 'upcoming') ? true : false;
     }
 }
 
 /* @function is_completed()  @version v1.0  @since 1.0 */
 if (!function_exists('is_completed')) {
-    function is_completed($stage='')
+    function is_completed($stage = '')
     {
-        return (active_stage_status($stage) =='completed') ? true : false;
+        return (active_stage_status($stage) == 'completed') ? true : false;
     }
 }
 
 /* @function is_expired()  @version v1.0  @since 1.0.5 */
 if (!function_exists('is_expired')) {
-    function is_expired($stage='')
+    function is_expired($stage = '')
     {
-        return (active_stage_status($stage) =='expired') ? true : false;
+        return (active_stage_status($stage) == 'expired') ? true : false;
     }
 }
 
 /* @function is_completed()  @version v1.0  @since 1.0 */
 if (!function_exists('is_running')) {
-    function is_running($stage='')
+    function is_running($stage = '')
     {
-        return (active_stage_status($stage) =='running') ? true : false;
+        return (active_stage_status($stage) == 'running') ? true : false;
     }
 }
 
@@ -1345,11 +1346,11 @@ if (!function_exists('stage_time')) {
 
 /* @function stage_meta()  @version v1.0  @since 1.1.2 */
 if (!function_exists('stage_meta')) {
-    function stage_meta($stage, $key='base', $value='amount', $option='bonus')
+    function stage_meta($stage, $key = 'base', $value = 'amount', $option = 'bonus')
     {
-        $option = ($option=='bonus') ? 'bonus_option' : 'price_option';
+        $option = ($option == 'bonus') ? 'bonus_option' : 'price_option';
         $meta = IcoMeta::get_data($stage, $option);
-        if ($key=='raw'||$value=='raw') {
+        if ($key == 'raw' || $value == 'raw') {
             return $meta;
         }
         $return = false;
@@ -1366,7 +1367,7 @@ if (!function_exists('stage_meta')) {
 
 /* @function get_base_bonus()  @version v1.1  @since 1.0 */
 if (!function_exists('get_base_bonus')) {
-    function get_base_bonus($id, $type=null)
+    function get_base_bonus($id, $type = null)
     {
         $tc = new TokenCalculate();
         $bonus = null;
@@ -1381,7 +1382,7 @@ if (!function_exists('get_base_bonus')) {
 
 /* @function current_price()  @version v1.0  @since 1.0.6 */
 if (!function_exists('current_price')) {
-    function current_price($type=null)
+    function current_price($type = null)
     {
         $tc = new TokenCalculate();
         $price = $tc->get_current_price($type);
@@ -1391,7 +1392,7 @@ if (!function_exists('current_price')) {
 
 /* @function sale_percent()  @version v1.0  @since 1.0.6 */
 if (!function_exists('sale_percent')) {
-    function sale_percent($stage=null)
+    function sale_percent($stage = null)
     {
         $stage = (empty($stage)) ? active_stage() : $stage;
         $percent = round((($stage->soldout * 100) / $stage->total_tokens), 1);
@@ -1401,7 +1402,7 @@ if (!function_exists('sale_percent')) {
 
 /* @function to_percent()  @version v1.0  @since 1.1.2 */
 if (!function_exists('to_percent')) {
-    function to_percent($amount, $total, $round=1)
+    function to_percent($amount, $total, $round = 1)
     {
         return round((($amount * 100) / $total), $round);
     }
@@ -1462,7 +1463,7 @@ if (!function_exists("dv2str")) {
         }
 
         $len = strlen($str);
-        $num = $len/2;
+        $num = $len / 2;
         return ($out == 2) ? substr($str, 0, $num) : substr($str, -$num, $num);
     }
 }
@@ -1500,7 +1501,7 @@ if (!function_exists('is_mail_setting_exist')) {
         $password = get_setting('site_mail_password');
         $encryption = get_setting('site_mail_encryption', 'tls');
         if ($driver != null && $address != null && $from != null) {
-            if ($address=='info@yourdomain.com'||$address=='noreply@yourdomain.com') {
+            if ($address == 'info@yourdomain.com' || $address == 'noreply@yourdomain.com') {
                 return false;
             }
             return true;
@@ -1553,7 +1554,7 @@ if (!function_exists('is_payment_method_exist')) {
             $is_pm_link = isset($manual->secret->link) && ($manual->secret->link->address != null && $manual->secret->link->status == 'active') ? true : false;
             $is_pm_cake = isset($manual->secret->cake) && ($manual->secret->cake->address != null && $manual->secret->cake->status == 'active') ? true : false;
 
-            if ($is_pm_eth||$is_pm_btc||$is_pm_ltc||$is_pm_xrp||$is_pm_xlm||$is_pm_bch||$is_pm_bnb||$is_pm_trx||$is_pm_usdt||$is_pm_usdc||$is_pm_dash||$is_pm_waves||$is_pm_xmr||$is_pm_busd||$is_pm_ada||$is_pm_doge||$is_pm_sol||$is_pm_uni||$is_pm_link||$is_pm_cake) {
+            if ($is_pm_eth || $is_pm_btc || $is_pm_ltc || $is_pm_xrp || $is_pm_xlm || $is_pm_bch || $is_pm_bnb || $is_pm_trx || $is_pm_usdt || $is_pm_usdc || $is_pm_dash || $is_pm_waves || $is_pm_xmr || $is_pm_busd || $is_pm_ada || $is_pm_doge || $is_pm_sol || $is_pm_uni || $is_pm_link || $is_pm_cake) {
                 $is_active_mm = true;
             }
 
@@ -1582,7 +1583,7 @@ if (!function_exists('is_payment_method_exist')) {
             ];
 
             if (isset($all_methods[$method])) {
-                return $t1 . ' - '.$all_methods[$method].' - '.microtime();
+                return $t1 . ' - ' . $all_methods[$method] . ' - ' . microtime();
             }
             return false;
         }
@@ -1670,7 +1671,7 @@ if (!function_exists('short_to_full')) {
 
 /* @function wallet_to_currency()  @version v1.3  @since 1.1.2 */
 if (!function_exists('wallet_to_currency')) {
-    function wallet_to_currency($wallet, $upper=1, $flip=false)
+    function wallet_to_currency($wallet, $upper = 1, $flip = false)
     {
         $name = str_replace(' ', '-', strtolower($wallet));
 
@@ -1697,11 +1698,11 @@ if (!function_exists('wallet_to_currency')) {
             'chainlink' => 'link',
             'pancakeSwap' => 'cake'
         );
-        if ($flip==true) {
+        if ($flip == true) {
             $all_cur = array_flip($all_cur);
         }
         $currency = (isset($all_cur[$name]) ? $all_cur[$name] : '');
-        return ($upper==1) ? strtoupper($currency) :  $currency;
+        return ($upper == 1) ? strtoupper($currency) :  $currency;
     }
 }
 
@@ -1717,7 +1718,7 @@ if (!function_exists('app_version')) {
 }
 /* @function gateway_type()  @version v1.0  @since 1.0.3 */
 if (!function_exists('gateway_type')) {
-    function gateway_type($method, $output='name')
+    function gateway_type($method, $output = 'name')
     {
         $name_short = 'online';
         $name_full = 'Online Gateway';
@@ -1731,18 +1732,18 @@ if (!function_exists('gateway_type')) {
             $name_full = 'Offline Payment';
         }
 
-        return ($output=='name') ? $name_full : $name_short;
+        return ($output == 'name') ? $name_full : $name_short;
     }
 }
 
 /* @function is_gateway()  @version v1.0  @since 1.0.3 */
 if (!function_exists('is_gateway')) {
-    function is_gateway($method, $type='')
+    function is_gateway($method, $type = '')
     {
         if (empty($type) && empty($method)) {
             return false;
         }
-        return ($type==gateway_type($method, 'short')) ? true : false;
+        return ($type == gateway_type($method, 'short')) ? true : false;
     }
 }
 
@@ -1773,7 +1774,7 @@ if (!function_exists('approved_by')) {
             $id = is_numeric($data->id) ? $data->id : (is_numeric($data) ? $data : 0);
             $user = User::find($id);
             if ($user) {
-                $return = $user->role == 'admin' ? $user->name.' ('.ucfirst($user->role).')' : 'Contributor';
+                $return = $user->role == 'admin' ? $user->name . ' (' . ucfirst($user->role) . ')' : 'Contributor';
             } elseif (isset($data->name)) {
                 $return = $data->name;
             }
@@ -1781,7 +1782,7 @@ if (!function_exists('approved_by')) {
             $id = is_numeric($data) ? $data : 0;
             $user = User::find($id);
             if ($user) {
-                $return = $user->role == 'admin' ? $user->name.' ('.ucfirst($user->role).')' : 'Contributor';
+                $return = $user->role == 'admin' ? $user->name . ' (' . ucfirst($user->role) . ')' : 'Contributor';
             } elseif (isset($data->name)) {
                 $return = $data->name;
             }
@@ -1794,7 +1795,7 @@ if (!function_exists('approved_by')) {
 if (!function_exists('token_price')) {
     function token_price($number, $currency = 'usd')
     {
-        if ($currency=='token') {
+        if ($currency == 'token') {
             return $number;
         }
         $currency = strtolower($currency);
@@ -1809,13 +1810,13 @@ if (!function_exists('token_price')) {
             $price = (isset($all_prices->$currency)) ? $all_prices->$currency : null;
         }
 
-        $price = ($price==null) ? 0 : $price;
+        $price = ($price == null) ? 0 : $price;
 
         if (base_currency() == $currency) {
             $price = active_stage()->base_price;
         }
 
-        $result = ((float) $number * (double) $price);
+        $result = ((float) $number * (float) $price);
 
         return $result == 0 ? '~' : $result;
     }
@@ -1850,19 +1851,19 @@ if (!function_exists('is_active_referral_system')) {
     function is_active_referral_system()
     {
         $referral_sys = get_setting('referral_system', 0);
-        return ($referral_sys==1) ? true : false;
+        return ($referral_sys == 1) ? true : false;
     }
 }
 
 /* @function referral_bonus  @version v1.1  @since 1.0.3 */
 if (!function_exists('referral_bonus')) {
-    function referral_bonus($user, $type='refer')
+    function referral_bonus($user, $type = 'refer')
     {
         $bonus = 0;
         $tranx = Transaction::get_by_own(['tnx_type' => 'referral'])->get();
         foreach ($tranx as $tnx) {
             $who = get_meta($tnx->extra, 'who');
-            if ($who==$user) {
+            if ($who == $user) {
                 $bonus += $tnx->tokens;
             }
         }
@@ -1875,7 +1876,7 @@ if (!function_exists('referral_bonus')) {
 
 /* @function referral_info  @version v1.0  @since 1.0.3 */
 if (!function_exists('referral_info')) {
-    function referral_info($user, $out='name')
+    function referral_info($user, $out = 'name')
     {
         $user_id = (is_json($user) ? get_meta($user, 'who') : $user);
         $get_user = User::where('id', $user_id)->first();
@@ -1901,15 +1902,15 @@ if (!function_exists('referral_name')) {
 
 /* @function get_refer_id  @version v1.0.1  @since 1.1.0 */
 if (!function_exists('get_refer_id')) {
-    function get_refer_id($prefix=true)
+    function get_refer_id($prefix = true)
     {
         $ref_by = (empty(request()->cookie('ico_nio_ref_by')) ? null : request()->cookie('ico_nio_ref_by'));
         $usr_id = ($ref_by) ? set_id($ref_by) : '';
-        return ($prefix==true) ? $usr_id : ($ref_by ?? '');
+        return ($prefix == true) ? $usr_id : ($ref_by ?? '');
     }
 }
 
-if (! function_exists('site_token')) {
+if (!function_exists('site_token')) {
     function site_token()
     {
         $dmn = hash('joaat', gdmn());
@@ -1920,23 +1921,23 @@ if (! function_exists('site_token')) {
         $dmn2 = substr($dmn, 0, 4);
         $cret = substr(getApiSecret('secret'), 1, 8);
         $secr = substr(app_key(1), 0, 12);
-        $token1 = $dmn1.dv2str($cret, 1).$tokenz.dv2str($secr, 1);
-        $token2 = $tokeny.dv2str($cret, 2).dv2str($secr, 2).$dmn2;
-        return $token1.substr($tokenx, 4, 6).$token2;
+        $token1 = $dmn1 . dv2str($cret, 1) . $tokenz . dv2str($secr, 1);
+        $token2 = $tokeny . dv2str($cret, 2) . dv2str($secr, 2) . $dmn2;
+        return $token1 . substr($tokenx, 4, 6) . $token2;
     }
 }
 
 /* @function get_whitepaper()  @version v1.0  @since 1.0 */
 if (!function_exists('get_whitepaper')) {
-    function get_whitepaper($out='')
+    function get_whitepaper($out = '')
     {
         $return = '';
         $wpaper_link = (get_setting('site_white_paper') != '') ? route('public.white.paper') : '';
         if ($wpaper_link) {
-            if ($out=='link') {
-                $return = '<a href="'.$wpaper_link.'" target="_blank">'. __('Download Whitepaper') .'</a>';
-            } elseif ($out=='button') {
-                $return = '<a href="'.$wpaper_link.'" target="_blank" class="btn btn-primary"><em class="fas fa-download mr-3"></em>'. __('Download Whitepaper') .'</a>';
+            if ($out == 'link') {
+                $return = '<a href="' . $wpaper_link . '" target="_blank">' . __('Download Whitepaper') . '</a>';
+            } elseif ($out == 'button') {
+                $return = '<a href="' . $wpaper_link . '" target="_blank" class="btn btn-primary"><em class="fas fa-download mr-3"></em>' . __('Download Whitepaper') . '</a>';
             } else {
                 $return = $wpaper_link;
             }
@@ -2003,7 +2004,7 @@ if (!function_exists('kyc_status')) {
 if (!function_exists('is_kyc_hide')) {
     function is_kyc_hide()
     {
-        return (gws('kyc_opt_hide', 0)==1) ? true : false;
+        return (gws('kyc_opt_hide', 0) == 1) ? true : false;
     }
 }
 
@@ -2013,7 +2014,7 @@ if (!function_exists('nio_status')) {
     {
         $h = new IcoHandler();
         if ($domain) {
-            return (substr($h->getDomain(), 0, -1)=='/' ? str_replace('/', '', $h->getDomain()) : $h->getDomain());
+            return (substr($h->getDomain(), 0, -1) == '/' ? str_replace('/', '', $h->getDomain()) : $h->getDomain());
         }
         return $h->check_body();
     }
@@ -2021,17 +2022,17 @@ if (!function_exists('nio_status')) {
 
 /* @function nio_feature()  @version v1.0  @since 1.1 */
 if (!function_exists('nio_feature')) {
-    function nio_feature($comp=null, $lock=false)
+    function nio_feature($comp = null, $lock = false)
     {
         $feature = false;
         $type = env_file('type');
-        if ($type>=2) {
+        if ($type >= 2) {
             $feature = ($lock) ? 'extend' : 'cool';
-        } elseif ($type==1) {
+        } elseif ($type == 1) {
             $feature = ($lock) ? 'none' : 'nice';
         }
 
-        return (!empty($comp)) ? (($comp==$feature) ? true : false) : $feature;
+        return (!empty($comp)) ? (($comp == $feature) ? true : false) : $feature;
     }
 }
 
@@ -2057,21 +2058,21 @@ if (!function_exists('get_slug')) {
 
 /* @function is_page()  @version v1.1  @since 1.0.3 */
 if (!function_exists('is_page')) {
-    function is_page($compare, $type=null)
+    function is_page($compare, $type = null)
     {
-        if ($type=='slug') {
+        if ($type == 'slug') {
             $full_url  = url()->current();
             $in_url = explode('/', $full_url);
             $current = array_pop($in_url);
-        } elseif ($type=='route') {
+        } elseif ($type == 'route') {
             $full_url  = Route::currentRouteName();
             $current = (is_admin()) ? str_replace('admin.', '', $full_url) : ((is_user()) ? str_replace('user.', '', $full_url) : $full_url);
         } else {
             $prefix = is_admin() ? 'admin' : (is_user() ? 'user' : '');
             $full_url = str_replace('.', '/', $compare);
-            $current = request()->is($prefix.'/'.$full_url);
+            $current = request()->is($prefix . '/' . $full_url);
         }
-        return ($current===true) ? true : (($current==$compare) ? true : false);
+        return ($current === true) ? true : (($current == $compare) ? true : false);
     }
 }
 
@@ -2081,8 +2082,8 @@ if (!function_exists('get_page_link')) {
     {
         $class = isset($attr['class']) ? ' class="' . $attr['class'] . '"' : '';
         $target = isset($attr['target']) ? ' target="' . $attr['target'] . '"' : '';
-        $is_name = (isset($attr['name']) && $attr['name']==true) ? true : false;
-        $is_status = (isset($attr['status']) && $attr['status']==true) ? true : false;
+        $is_name = (isset($attr['name']) && $attr['name'] == true) ? true : false;
+        $is_status = (isset($attr['status']) && $attr['status'] == true) ? true : false;
         $pages_slug = [
             'htb' => 'home_top',
             'hbb' => 'home_bottom',
@@ -2101,7 +2102,7 @@ if (!function_exists('get_page_link')) {
             if ($page->status == 'active') {
                 $result = $link;
             } else {
-                if ($is_status==true) {
+                if ($is_status == true) {
                     $result = false;
                 } else {
                     $result = $text;
@@ -2176,7 +2177,7 @@ if (!function_exists('is_https_active')) {
 
 /* @function auto_p()  @version v1.1  @since 1.0 */
 if (!function_exists('auto_p')) {
-    function auto_p($pee, $br = true, $add='')
+    function auto_p($pee, $br = true, $add = '')
     {
         $pre_tags = array();
 
@@ -2250,7 +2251,7 @@ if (!function_exists('auto_p')) {
             $pee = str_replace(array_keys($pre_tags), array_values($pre_tags), $pee);
         }
 
-        return $add.$pee;
+        return $add . $pee;
     }
 }
 
@@ -2264,7 +2265,7 @@ if (!function_exists('_joaat')) {
 
 /* @function _x()  @version v1.0  @since 1.0.6 */
 if (!function_exists('_x')) {
-    function _x($string, $allow='')
+    function _x($string, $allow = '')
     {
         return ($allow) ? strip_tags($string, $allow) : strip_tags($string);
     }
@@ -2341,26 +2342,26 @@ if (!function_exists('arr_convert')) {
 
 /* @function ico_stage_progress()  @version v1.2  @since 1.0 */
 if (!function_exists('ico_stage_progress')) {
-    function ico_stage_progress($type, $in_currency='token', $istage=null)
+    function ico_stage_progress($type, $in_currency = 'token', $istage = null)
     {
         $stage = (empty($istage)) ? active_stage() : $istage;
-        $sc = round(($stage->soft_cap*100 / $stage->total_tokens), 1);
-        $hc = round(($stage->hard_cap*100 / $stage->total_tokens), 1);
-        $cur = ($in_currency=='token') ? token_symbol() : strtoupper($in_currency);
+        $sc = round(($stage->soft_cap * 100 / $stage->total_tokens), 1);
+        $hc = round(($stage->hard_cap * 100 / $stage->total_tokens), 1);
+        $cur = ($in_currency == 'token') ? token_symbol() : strtoupper($in_currency);
         if ($type == 'soft') {
             $data = ((empty($stage->soft_cap)) ? 0 : (($sc >= 8 && $sc <= 42) ? round($sc, 2) : 8));
         } elseif ($type == 'hard') {
             $data = ((empty($stage->hard_cap)) ? 0 : (($hc >= 58 && $hc <= 92) ? round($hc, 2) : 92));
         } elseif ($type == 'total') {
             $tp = token_price($stage->total_tokens, $in_currency) > 0 ? token_price($stage->total_tokens, $in_currency) : 0;
-            $data = ($in_currency == 'token' ? to_num_token($stage->total_tokens) : to_num($tp, 'auto')).' '. $cur;
+            $data = ($in_currency == 'token' ? to_num_token($stage->total_tokens) : to_num($tp, 'auto')) . ' ' . $cur;
         } elseif ($type == 'raised') {
             $tp = token_price($stage->soldout, $in_currency) > 0 ? token_price($stage->soldout, $in_currency) : 0;
-            $data = ($in_currency == 'token' ? to_num_token($stage->soldout) : to_num($tp, 'auto')).' '. $cur;
+            $data = ($in_currency == 'token' ? to_num_token($stage->soldout) : to_num($tp, 'auto')) . ' ' . $cur;
         } elseif ($type == 'softtoken') {
-            $data = ($in_currency == 'token' ? to_num_token($stage->soft_cap) : to_num(token_price($stage->soft_cap, $in_currency), 'auto')).' '. $cur;
+            $data = ($in_currency == 'token' ? to_num_token($stage->soft_cap) : to_num(token_price($stage->soft_cap, $in_currency), 'auto')) . ' ' . $cur;
         } elseif ($type == 'hardtoken') {
-            $data = ($in_currency == 'token' ? to_num_token($stage->hard_cap) : to_num(token_price($stage->hard_cap, $in_currency), 'auto')).' '. $cur;
+            $data = ($in_currency == 'token' ? to_num_token($stage->hard_cap) : to_num(token_price($stage->hard_cap, $in_currency), 'auto')) . ' ' . $cur;
         }
         return $data;
     }
@@ -2371,7 +2372,7 @@ if (!function_exists('explode_user_for_demo')) {
     function explode_user_for_demo($data, $user_type)
     {
         if ($user_type == 'demo') {
-            $data = substr($data, 0, 3).'...'.substr($data, -3);
+            $data = substr($data, 0, 3) . '...' . substr($data, -3);
         }
 
         return $data;
@@ -2380,19 +2381,19 @@ if (!function_exists('explode_user_for_demo')) {
 
 /* @function get_lang()  @version v1.0.1  @since 1.1.3 */
 if (!function_exists('get_lang')) {
-    function get_lang($get=null)
+    function get_lang($get = null)
     {
         if (application_installed(true) && Schema::hasTable('languages')) {
             $actived_lang = Language::where('status', 1)->get(['name', 'label', 'short', 'code']);
             $languages = [];
             if ($actived_lang) {
                 foreach ($actived_lang as $lang) {
-                    $languages[$lang->code] = (gws('languages_show_as', 'code')=='code') ? $lang->short : $lang->label;
+                    $languages[$lang->code] = (gws('languages_show_as', 'code') == 'code') ? $lang->short : $lang->label;
                 }
             }
             if (empty($get)) {
                 return array_keys($languages);
-            } elseif ($get=='labels'||$get=='label'||$get=='short') {
+            } elseif ($get == 'labels' || $get == 'label' || $get == 'short') {
                 return $languages;
             } elseif (isset($languages[$get])) {
                 return $languages[$get];
@@ -2404,7 +2405,7 @@ if (!function_exists('get_lang')) {
 
 /* @function is_lang_switch()  @version v1.1  @since 1.0.2 */
 if (!function_exists('is_lang_switch')) {
-    function is_lang_switch($where=null)
+    function is_lang_switch($where = null)
     {
         $switcher = config('icoapp.show_languages_switcher');
         return ($switcher) ? true : false;
@@ -2413,11 +2414,11 @@ if (!function_exists('is_lang_switch')) {
 
 /* @function available_lang()  @version v1.0  @since 1.1.0 */
 if (!function_exists('available_lang')) {
-    function available_lang($lang=null, $out='join')
+    function available_lang($lang = null, $out = 'join')
     {
         $get_langs = config('icoapp.supported_languages');
         if (empty($lang)) {
-            $return = ($out=='array') ? $get_langs : strtoupper(join(', ', $get_langs));
+            $return = ($out == 'array') ? $get_langs : strtoupper(join(', ', $get_langs));
         } else {
             $return = (isset($get_langs[$lang])) ? true : false;
         }
@@ -2442,19 +2443,19 @@ if (!function_exists('current_lang')) {
 
 /* @function is_show_social()  @version v1.0  @since 1.0.2 */
 if (!function_exists('is_show_social')) {
-    function is_show_social($where=null)
+    function is_show_social($where = null)
     {
         $return = false;
         $social = json_decode(get_setting('site_social_links', []));
 
         $is_exist = UserPanel::social_links('exists');
 
-        $onsite = (isset($social->onsite) && $social->onsite && $is_exist==true) ? true : false;
-        $onlogin = (isset($social->onlogin) && $social->onlogin && $is_exist==true) ? true : false;
+        $onsite = (isset($social->onsite) && $social->onsite && $is_exist == true) ? true : false;
+        $onlogin = (isset($social->onlogin) && $social->onlogin && $is_exist == true) ? true : false;
 
-        if ($where=='site') {
+        if ($where == 'site') {
             $return = $onsite;
-        } elseif ($where=='login') {
+        } elseif ($where == 'login') {
             $return = $onlogin;
         }
 
@@ -2467,11 +2468,11 @@ if (!function_exists('site_copyrights')) {
     function site_copyrights()
     {
         $is_env = (env_file(3, 1) && !empty(env_file('p')));
-        $year = '&copy; '.date('Y ');
-        $app_info = app_info('name').' v'.app_info('version');
-        $copyright = $year.site_info('name') . '. ' . gws('site_copyright');
+        $year = '&copy; ' . date('Y ');
+        $app_info = app_info('name') . ' v' . app_info('version');
+        $copyright = $year . site_info('name') . '. ' . gws('site_copyright');
 
-        $copyright = (is_admin() && !is_2fa_lock() && $is_env) ? $year.$app_info.'. All Rights Reserved. <br class="d-block d-md-none">Application Developed by <a href="https://softnio.com/" target="_blank">Softnio</a>.' : $copyright;
+        $copyright = (is_admin() && !is_2fa_lock() && $is_env) ? $year . $app_info . '. All Rights Reserved. <br class="d-block d-md-none">Application Developed by <a href="https://softnio.com/" target="_blank">Softnio</a>.' : $copyright;
 
         return $copyright;
     }
@@ -2480,54 +2481,54 @@ if (!function_exists('site_copyrights')) {
 
 /* @function style_theme()  @version v1.2  @since 1.0.2 */
 if (!function_exists('style_theme')) {
-    function style_theme($panel='base', $ver=true)
+    function style_theme($panel = 'base', $ver = true)
     {
         $to_extend  = nio_feature();
         $a_sheet = ($to_extend) ? gws('theme_admin', 'style') : 'style';
         $u_sheet = gws('theme_user', 'style');
         $admin_color = '#7D70FC';
 
-        if ($a_sheet=='style-green' || $a_sheet=='style-watermelon') {
+        if ($a_sheet == 'style-green' || $a_sheet == 'style-watermelon') {
             $admin_color = '#8eff8b';
-        } elseif ($a_sheet=='style-coral') {
+        } elseif ($a_sheet == 'style-coral') {
             $admin_color = '#f35151';
-        } elseif ($a_sheet=='style-gold') {
+        } elseif ($a_sheet == 'style-gold') {
             $admin_color = '#ffc034';
-        } elseif ($a_sheet=='style-tangerine') {
+        } elseif ($a_sheet == 'style-tangerine') {
             $admin_color = '#ff812d';
         }
 
         $stylesheets = [
             'vendor' => 'assets/css/vendor.bundle.css',
             'base' => 'assets/css/style.css',
-            'admin' => 'assets/css/'.$a_sheet.'.css',
+            'admin' => 'assets/css/' . $a_sheet . '.css',
             'admin-color' => $admin_color,
-            'user' => 'assets/css/'.$u_sheet.'.css',
+            'user' => 'assets/css/' . $u_sheet . '.css',
             'custom' => 'css/custom.css',
         ];
 
         $style = (isset($stylesheets[$panel])) ? $stylesheets[$panel] : $stylesheets['base'];
-        return ($ver) ? $style.css_js_ver() : $style;
+        return ($ver) ? $style . css_js_ver() : $style;
     }
 }
 
 /* @function theme_color()  @version v1.0  @since 1.1.1 */
 if (!function_exists('theme_color')) {
-    function theme_color($out='base', $name=null, $theme='admin')
+    function theme_color($out = 'base', $name = null, $theme = 'admin')
     {
         $style = (!empty($name)) ? str_replace('style-', '', $name) : 'default';
-        $defaults = str_replace('style-', '', gws('theme_'.$theme, 'style'));
+        $defaults = str_replace('style-', '', gws('theme_' . $theme, 'style'));
 
         $preset = [
-            "style" => ['base' => "#7668fe", 'text'=> '#495463', 'heading'=> '#253992'],
-            "default" => ['base' => "#7668fe", 'text'=> '#495463', 'heading'=> '#253992'],
-            "blue" => ['base' => "#2c80ff", 'text'=> '#495463', 'heading'=> '#253992'],
-            "green" => ['base' => "#21a184", 'text'=> '#a6a8ad', 'heading'=> '#5f6569'],
-            "charcoal" => ['base' => "#455e84", 'text'=> '#a6a8ad', 'heading'=> '#5f6569'],
-            "coral" => ['base' => "#ce2e2e", 'text'=> '#a6a8ad', 'heading'=> '#5f6569'],
-            "gold" => ['base' => "#d8990e", 'text'=> '#a6a8ad', 'heading'=> '#5f6569'],
-            "tangerine" => ['base' => "#ff812d", 'text'=> '#a6a8ad', 'heading'=> '#5f6569'],
-            "watermelon" => ['base' => "#04a919", 'text'=> '#a6a8ad', 'heading'=> '#5f6569']
+            "style" => ['base' => "#7668fe", 'text' => '#495463', 'heading' => '#253992'],
+            "default" => ['base' => "#7668fe", 'text' => '#495463', 'heading' => '#253992'],
+            "blue" => ['base' => "#2c80ff", 'text' => '#495463', 'heading' => '#253992'],
+            "green" => ['base' => "#21a184", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
+            "charcoal" => ['base' => "#455e84", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
+            "coral" => ['base' => "#ce2e2e", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
+            "gold" => ['base' => "#d8990e", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
+            "tangerine" => ['base' => "#ff812d", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
+            "watermelon" => ['base' => "#04a919", 'text' => '#a6a8ad', 'heading' => '#5f6569']
         ];
 
         $color = (empty($name)) ? $defaults : $style;
@@ -2539,7 +2540,7 @@ if (!function_exists('theme_color')) {
 
 /* @function get_meta()  @version v1.0  @since 1.0.3 */
 if (!function_exists('get_meta')) {
-    function get_meta($data=null, $key=null)
+    function get_meta($data = null, $key = null)
     {
         $meta = is_json($data) ? json_decode($data) : false;
 
@@ -2552,7 +2553,7 @@ if (!function_exists('get_meta')) {
 
 /* @function get_tnx()  @version v1.0  @since 1.0.3 */
 if (!function_exists('get_tnx')) {
-    function get_tnx($tnx, $out=null)
+    function get_tnx($tnx, $out = null)
     {
         $get_tnx = (!empty($tnx)) ? Transaction::where('tnx_id', $tnx)->first() : false;
 
@@ -2575,7 +2576,7 @@ if (!function_exists('get_tnx_id')) {
 
 /* @function getApiSecret()()  @version v1.0 */
 if (!function_exists('getApiSecret()')) {
-    function getApiSecret($name=null)
+    function getApiSecret($name = null)
     {
         if ($name == 'secret') {
             return get_setting('site_api_secret', str_random(16));
@@ -2586,16 +2587,16 @@ if (!function_exists('getApiSecret()')) {
 
 /* @function api_route()  @version v1.0  @since 1.0.6 */
 if (!function_exists('api_route')) {
-    function api_route($name='')
+    function api_route($name = '')
     {
-        $url = route('api.'.$name, ['secret' => getApiSecret('key')]);
+        $url = route('api.' . $name, ['secret' => getApiSecret('key')]);
         return $url;
     }
 }
 
 /* @function currency_join()  @version v1.0  @since 1.1.0 */
 if (!function_exists('currency_join')) {
-    function currency_join($curs=null)
+    function currency_join($curs = null)
     {
         if (empty($curs)) {
             return false;
@@ -2636,7 +2637,7 @@ if (!function_exists('qs_url')) {
 
 /* @function get_user()  @version v1.0  @since 1.1.0 */
 if (!function_exists('get_user')) {
-    function get_user($id, $out=null)
+    function get_user($id, $out = null)
     {
         $get_user = User::whereNotIn('status', ['deleted'])->find($id);
         $return = (!empty($get_user) ? $get_user : false);
@@ -2651,17 +2652,17 @@ if (!function_exists('get_user')) {
 
 //* @function get_admin()  @version v1.0  @since 1.1.2 */
 if (!function_exists('get_admin')) {
-    function get_admin($out=null, $extra = false)
+    function get_admin($out = null, $extra = false)
     {
         $user = auth()->user();
         if ($user->role == 'admin') {
             $get_user = $user;
         } else {
             $get_user = User::whereNotIn('status', ['deleted'])
-                    ->where('role', 'admin')
-                    ->when($extra, function ($q) use ($extra) {
-                        return $q->where($extra);
-                    })->first();
+                ->where('role', 'admin')
+                ->when($extra, function ($q) use ($extra) {
+                    return $q->where($extra);
+                })->first();
         }
         $return = (!empty($get_user) ? $get_user : false);
 
@@ -2715,7 +2716,7 @@ if (!function_exists('tnx_meta')) {
 
 /* @function cur_meta()  @version v1.0  @since 1.1.2 */
 if (!function_exists('cur_meta')) {
-    function cur_meta($tnx, $out=null)
+    function cur_meta($tnx, $out = null)
     {
         return tnx_meta($tnx, 'currency_data', $out);
     }
@@ -2723,7 +2724,7 @@ if (!function_exists('cur_meta')) {
 
 /* @function pay_meta()  @version v1.0  @since 1.1.2 */
 if (!function_exists('pay_meta')) {
-    function pay_meta($tnx, $out=null)
+    function pay_meta($tnx, $out = null)
     {
         return tnx_meta($tnx, 'pay_data', $out);
     }
@@ -2731,7 +2732,7 @@ if (!function_exists('pay_meta')) {
 
 /* @function recaptcha()  @version v1.0  @since 1.1.4 */
 if (!function_exists('recaptcha')) {
-    function recaptcha($out=null)
+    function recaptcha($out = null)
     {
         $sitekey    = gws('recaptcha_site_key');
         $secret     = gws('recaptcha_secret_key');
@@ -2740,9 +2741,9 @@ if (!function_exists('recaptcha')) {
         if ($has_key) {
             if (empty($out)) {
                 return $has_key;
-            } elseif ($out=='site') {
+            } elseif ($out == 'site') {
                 return $sitekey;
-            } elseif ($out=='secret') {
+            } elseif ($out == 'secret') {
                 return $secret;
             }
         }

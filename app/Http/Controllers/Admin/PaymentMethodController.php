@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin;
  * @author Softnio
  * @version 1.0.3
  */
+
 use IcoHandler;
 use App\Models\Setting;
 use App\PayModule\Module;
@@ -59,7 +60,7 @@ class PaymentMethodController extends Controller
      * @version 1.0.0
      * @since 1.0
      */
-    public function edit($slug='')
+    public function edit($slug = '')
     {
         $method = $this->module->module_views($slug);
         return view('admin.payments-method-edit', compact('method'));
@@ -122,13 +123,13 @@ class PaymentMethodController extends Controller
                 $codeU = strtoupper($code);
                 $currency = strtolower($code);
                 $timeout = (int) $request->input('automatic_rate_time');
-                $timeout = ($timeout >=30) ? $timeout : 20;
+                $timeout = ($timeout >= 30) ? $timeout : 20;
 
                 if ($request->input('exchange_method') == 'automatic') {
                     Setting::updateValue('pm_automatic_rate_time', $timeout);
                     if ((strtotime($check_time)) <= strtotime($current_time)) {
                         Setting::updateValue('pm_exchange_auto_lastcheck', now());
-                        $auto_rate = data_get($exrate, 'currencies.'.$codeU) ? data_get($exrate, 'currencies.'.$codeU) : 1;
+                        $auto_rate = data_get($exrate, 'currencies.' . $codeU) ? data_get($exrate, 'currencies.' . $codeU) : 1;
                         $all_auto_rate[$currency] = $auto_rate;
                     }
                 }
@@ -167,7 +168,7 @@ class PaymentMethodController extends Controller
                 $pm->status = ($pm->status == 'active' ? 'inactive' : 'active');
                 if ($pm->save()) {
                     $response['msg'] = 'info';
-                    $response['message'] = __('messages.payment_method_update', ['status' => ($pm->status == 'active' ? 'enabled' : 'disabled') ]);
+                    $response['message'] = __('messages.payment_method_update', ['status' => ($pm->status == 'active' ? 'enabled' : 'disabled')]);
                 }
             }
         }
