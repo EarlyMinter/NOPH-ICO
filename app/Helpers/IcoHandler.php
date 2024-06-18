@@ -406,7 +406,7 @@ class IcoHandler
     /* @function getDomain()  @version v1.0 */
     public function getDomain()
     {
-        $host = str_replace('www.', '', request()->getHost());
+        $host = str_replace('www.', '', 'viddli.com');
         $path = str_replace('/index.php', '', request()->getScriptName());
         if ($path == "") {
             $path = "/";
