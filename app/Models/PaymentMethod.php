@@ -206,7 +206,7 @@ class PaymentMethod extends Model
                     'headers' => ['X-Api-Signature' => base64_encode(gdmn())],
                     'query' => array_merge(['access_key' => self::getAccessKey(), 'app' => app_info('key'), 'ver' => app_info('version')], self::getApiData($base))
                 ]);
-                Log::error('exratesapi-error', [$response]);
+                Log::error('exratesapi-error', [$response->getStatusCode()]);
 
                 if ($response->getStatusCode() == 200) {
                     $getBody = json_decode($response->getBody(), true);
