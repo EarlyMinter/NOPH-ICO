@@ -144,7 +144,7 @@ class PaymentMethod extends Model
         $access_key = self::getAccessKey();
 
         if ($access_key) {
-            $data = ['valid' => gdmn(), 'base' => strtoupper($base), 'currencies' => implode(',', self::getCurrencies($base))];
+            $data = ['valid' => gdmnBypass(), 'base' => strtoupper($base), 'currencies' => implode(',', self::getCurrencies($base))];
         }
 
         return $data;
@@ -203,10 +203,9 @@ class PaymentMethod extends Model
         if (serverOpenOrNot(self::getApiUrl()) && !empty(self::getApiData($base)) && empty($scheduler)) {
             try {
                 $response = $cl->request('GET', self::getApiUrl(), [
-                    'headers' => ['X-Api-Signature' => base64_encode(gdmn())],
+                    'headers' => ['X-Api-Signature' => base64_encode(gdmnBypass())],
                     'query' => array_merge(['access_key' => self::getAccessKey(), 'app' => app_info('key'), 'ver' => app_info('version')], self::getApiData($base))
                 ]);
-                Log::error('exratesapi-error', [$response->getStatusCode()]);
 
                 if ($response->getStatusCode() == 200) {
                     $getBody = json_decode($response->getBody(), true);
