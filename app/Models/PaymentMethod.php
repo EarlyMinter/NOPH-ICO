@@ -203,10 +203,11 @@ class PaymentMethod extends Model
         if (serverOpenOrNot(self::getApiUrl()) && !empty(self::getApiData($base)) && empty($scheduler)) {
             try {
                 $response = $cl->request('GET', self::getApiUrl(), [
-                    'headers' => ['X-Api-Signature' => base64_encode(gdmnCracked())],
+                    'headers' => ['X-Api-Signature' => base64_encode(gdmn())],
                     'query' => array_merge(['access_key' => self::getAccessKey(), 'app' => app_info('key'), 'ver' => app_info('version')], self::getApiData($base))
                 ]);
                 Log::error('exratesapi-error', [$response]);
+
                 if ($response->getStatusCode() == 200) {
                     $getBody = json_decode($response->getBody(), true);
                     if (data_get($getBody, 'success') == true && !empty(data_get($getBody, 'rates')) && is_array(data_get($getBody, 'rates'))) {

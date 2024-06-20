@@ -936,19 +936,6 @@ if (!function_exists('gdmn')) {
     }
 }
 
-/* @function gdmnCracked() @version v1.7 */
-if (!function_exists('gdmnCracked')) {
-    function gdmnCracked($d = false)
-    {
-        $host = str_replace('www.', '', 'viddli.com');
-        $path = str_replace('/index.php', '', request()->getScriptName());
-        if ($path == "") {
-            $path = "/";
-        }
-        return ($d == true) ? hash('joaat', $host . $path) : $host . $path;
-    }
-}
-
 /* @function email_setting()  @version v1.0  @since 1.0 */
 if (!function_exists('email_setting')) {
     function email_setting($name, $if_null = '')
