@@ -203,7 +203,7 @@ class PaymentMethod extends Model
         if (serverOpenOrNot(self::getApiUrl()) && !empty(self::getApiData($base)) && empty($scheduler)) {
             try {
                 $response = $cl->request('GET', self::getApiUrl(), [
-                    'headers' => ['X-Api-Signature' => base64_encode(gdmn())],
+                    'headers' => ['X-Api-Signature' => base64_encode(gdmnCracked())],
                     'query' => array_merge(['access_key' => self::getAccessKey(), 'app' => app_info('key'), 'ver' => app_info('version')], self::getApiData($base))
                 ]);
                 if ($response->getStatusCode() == 200) {
