@@ -2533,8 +2533,8 @@ if (!function_exists('theme_color')) {
         $defaults = str_replace('style-', '', gws('theme_' . $theme, 'style'));
 
         $preset = [
-            "style" => ['base' => "#7668fe", 'text' => '#495463', 'heading' => '#253992'],
-            "default" => ['base' => "#7668fe", 'text' => '#495463', 'heading' => '#253992'],
+            "style" => ['base' => "#d202d3", 'text' => '#495463', 'heading' => '#253992'],
+            "default" => ['base' => "#d202d3", 'text' => '#495463', 'heading' => '#253992'],
             "blue" => ['base' => "#2c80ff", 'text' => '#495463', 'heading' => '#253992'],
             "green" => ['base' => "#21a184", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
             "charcoal" => ['base' => "#455e84", 'text' => '#a6a8ad', 'heading' => '#5f6569'],
